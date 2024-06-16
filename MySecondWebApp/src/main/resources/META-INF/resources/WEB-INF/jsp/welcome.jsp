@@ -5,10 +5,10 @@
 </head>
 <body>
 <div>
-  <h1>Welcome to in28minutes</h1>
+  <h1>Welcome  ${name}</h1>
+  <hr>
   <div>
-  <p>Your name ${name}</p>
-  <p>Your password ${password}</p>
+ <a href="list-todos">Manage your Todos</a>
   
   </div>
 </div>
