@@ -1,12 +1,4 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Todos List</title>
-    <!-- Include Bootstrap CSS -->
-    <link rel="stylesheet" href="webjars/bootstrap/5.1.3/css/bootstrap.min.css">
-</head>
-<body>
+<%@ include file="common/header.jspf" %>
     <div class="container">
         <div class="my-4">
             <h1>Welcome ${name}</h1>
@@ -41,8 +33,4 @@
         
     </div>
     
-    <!-- Include jQuery and Bootstrap JS -->
-    <script src="webjars/jquery/3.6.0/jquery.min.js"></script>
-    <script src="webjars/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+  <%@ include file="common/footer.jspf" %>

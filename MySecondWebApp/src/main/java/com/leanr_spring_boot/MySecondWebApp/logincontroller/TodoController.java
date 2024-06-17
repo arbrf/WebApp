@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -25,14 +27,20 @@ public class TodoController {
 
     @RequestMapping("/list-todos")
     public String listAllTodos(ModelMap model) {
-        List<Todo> todos = todoService.findByuserName("in28minutes");
+    	 String username = getLoggedInUserName(model);
+        List<Todo> todos = todoService.findByuserName(username);
         model.put("todos", todos);
         return "listTodos";
     }
+
+	private String getLoggedInUserName(ModelMap model) {
+		Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+		return authentication.getName();
+	}
     
     @RequestMapping(value = "/add-todo",method = RequestMethod.GET)
     public String addnewTodo(ModelMap modelMap) {
-    	String username = (String)modelMap.get("name");
+    	String username = getLoggedInUserName(modelMap);
         Todo todo=new Todo(1, username, "", LocalDate.now(), false);
         modelMap.put("todo", todo);
         return "todo";
@@ -42,8 +50,10 @@ public class TodoController {
     	if(result.hasErrors()) {
     		 return "todo";
     	}
-        String username = (String)model.get("name");
-        todoService.addTodo(username,todo.getDescription(),LocalDate.now().plusYears(1),false);
+        String username = getLoggedInUserName(model);
+        System.out.println("Apple");
+        System.out.println(todo.toString());
+        todoService.addTodo(username,todo.getDescription(),todo.getTargetDate(),false);
         return "redirect:list-todos";
     }
     
@@ -63,9 +73,9 @@ public class TodoController {
     	if(result.hasErrors()) {
    		 return "todo";
    	}
-       String username = (String)model.get("name");
+       String username = getLoggedInUserName(model);
        todo.setUsername(username);
-       todo.setTargetDate(LocalDate.now().plusYears(2));
+       
        todoService.updateTodo(todo);
        return "redirect:list-todos";
    }
