@@ -15,23 +15,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.leanr_spring_boot.MySecondWebApp.todo.Todo;
-import com.leanr_spring_boot.MySecondWebApp.todoRepository.TodoRepository;
 import com.leanr_spring_boot.MySecondWebApp.todoService.TodoService;
 
 import jakarta.validation.Valid;
 
-@Controller
+//@Controller
 @SessionAttributes("name")
-public class TodoController {
+public class TodoJpaController {
     @Autowired
     TodoService todoService;
-    @Autowired
-private TodoRepository repository;
+
     @RequestMapping("/list-todos")
     public String listAllTodos(ModelMap model) {
     	 String username = getLoggedInUserName(model);
-    	 List<Todo> todos = repository.findByUsername(username);
-      //  List<Todo> todos = todoService.findByuserName(username);
+        List<Todo> todos = todoService.findByuserName(username);
         model.put("todos", todos);
         return "listTodos";
     }
@@ -54,21 +51,20 @@ private TodoRepository repository;
     		 return "todo";
     	}
         String username = getLoggedInUserName(model);
-        todo.setUsername(username);
-        repository.save(todo);
-        //todoService.addTodo(username,todo.getDescription(),todo.getTargetDate(),false);
+        System.out.println("Apple");
+        System.out.println(todo.toString());
+        todoService.addTodo(username,todo.getDescription(),todo.getTargetDate(),false);
         return "redirect:list-todos";
     }
     
     @RequestMapping(value = "/delete-todo",method = RequestMethod.GET)
     public String deleteTodo(@RequestParam int id) {
-//    	todoService.deleteTodo(id);
-    	repository.deleteById(id);
+    	todoService.deleteTodo(id);
         return "redirect:list-todos";
     }
     @RequestMapping(value = "/update-todo",method = RequestMethod.GET)
     public String updateTodo(@RequestParam int id,ModelMap map) {
-    Todo todo=	repository.findById(id).get();
+    Todo todo=	todoService.findById(id);
     map.put("todo", todo);
         return "todo";
     }
@@ -80,8 +76,7 @@ private TodoRepository repository;
        String username = getLoggedInUserName(model);
        todo.setUsername(username);
        
-       //todoService.updateTodo(todo);
-       repository.save(todo);
+       todoService.updateTodo(todo);
        return "redirect:list-todos";
    }
     

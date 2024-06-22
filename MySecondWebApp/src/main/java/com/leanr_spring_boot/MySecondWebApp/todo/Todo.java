@@ -2,9 +2,17 @@ package com.leanr_spring_boot.MySecondWebApp.todo;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Size;
-
+@Entity
 public class Todo {
+	public Todo() {
+		// TODO Auto-generated constructor stub
+	}
+	@Id
+	@GeneratedValue
     private int id;
     private String username;
     @Size(min = 10,message = "Enter Atleast 10 characters")
