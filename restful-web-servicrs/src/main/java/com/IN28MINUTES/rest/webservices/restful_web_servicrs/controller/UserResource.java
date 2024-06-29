@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.IN28MINUTES.rest.webservices.restful_web_servicrs.user.User;
 import com.IN28MINUTES.rest.webservices.restful_web_servicrs.user.UserDaoService;
+
+import jakarta.validation.Valid;
 
 @RestController
 public class UserResource {
@@ -31,25 +34,32 @@ public class UserResource {
 	@GetMapping("/users/{id}")
 	public User retrieveUser(@PathVariable int id) {
 		User user = service.findOne(id);
-		
-		if(user==null)
-			throw new UserNotFoundException("id:"+id);
-		
+
+		if (user == null)
+			throw new UserNotFoundException("id:" + id);
+
 		return user;
 	}
 
+	@DeleteMapping("/users/{id}")
+	public void deleteUser(@PathVariable int id) {
+		User user = service.findOne(id);
+
+		if (user == null)
+			throw new UserNotFoundException("id:" + id);
+		service.deleteUserById(id);
+
+	}
+
 	@PostMapping("/users")
-	public ResponseEntity<User> createUser(@RequestBody User user) {
-		
+	public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
+
 		User savedUser = service.save(user);
 
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-						.path("/{id}")
-						.buildAndExpand(savedUser.getId())
-						.toUri();   
-		
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId())
+				.toUri();
+
 		return ResponseEntity.created(location).build();
 	}
-	
-	
+
 }
