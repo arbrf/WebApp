@@ -2,14 +2,24 @@ package com.IN28MINUTES.rest.webservices.restful_web_servicrs.user;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
-
+@Entity
+@Table(name = "user_details")
 public class User {
+	protected User() {}
+	@Id
+	@GeneratedValue
 	private Integer id;
 	@Size(min=2,message = "Name should have atleast 2 characters")
 	private String name;
 	@Past(message = "TheBirthDate Should be Past")
+	@Column(name = "birth_date")
 	private LocalDate birthDate;
 
 	public User(Integer id, String name, LocalDate birthDate) {
